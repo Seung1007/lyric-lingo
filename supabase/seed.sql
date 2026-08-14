@@ -19,9 +19,9 @@ insert into lyric_lines (song_id, line_order, original_text, romanized_text, mea
   ('00000000-0000-0000-0000-000000000002', 2, 'Not a footprint to be seen', null, '발자국 하나 보이지 않아')
 on conflict (song_id, line_order) do nothing;
 
-insert into lyric_lines (song_id, line_order, original_text, ipa_text, note_text, word_glosses) values
-  ('00000000-0000-0000-0000-000000000003', 1, 'Caro nome che il mio cor', 'ˈka.ro ˈnɔ.me ke il mio kɔr', '''nome''의 이중자음 처리, 개모음 [ɔ] 유의',
+insert into lyric_lines (song_id, line_order, original_text, ipa_text, meaning_text, note_text, word_glosses) values
+  ('00000000-0000-0000-0000-000000000003', 1, 'Caro nome che il mio cor', 'ˈka.ro ˈnɔ.me ke il mio kɔr', '그리운 그 이름이 내 마음에', '''nome''의 이중자음 처리, 개모음 [ɔ] 유의',
     '[{"word": "Caro", "meaning": "사랑스러운, 소중한"}, {"word": "nome", "meaning": "이름"}, {"word": "che", "meaning": "(관계대명사) ~하는"}, {"word": "il mio", "meaning": "나의"}, {"word": "cor", "meaning": "마음, 심장"}]'::jsonb),
-  ('00000000-0000-0000-0000-000000000003', 2, 'festi primo palpitar', 'ˈfɛs.ti ˈpri.mo pal.pi.ˈtar', '''palpitar'' 어말 r 굴림, 강세 위치 확인',
+  ('00000000-0000-0000-0000-000000000003', 2, 'festi primo palpitar', 'ˈfɛs.ti ˈpri.mo pal.pi.ˈtar', '처음 설렘을 안겨주었죠', '''palpitar'' 어말 r 굴림, 강세 위치 확인',
     '[{"word": "festi", "meaning": "(당신은) 만들었다, 일으켰다"}, {"word": "primo", "meaning": "처음의"}, {"word": "palpitar", "meaning": "설렘, 두근거림"}]'::jsonb)
 on conflict (song_id, line_order) do nothing;

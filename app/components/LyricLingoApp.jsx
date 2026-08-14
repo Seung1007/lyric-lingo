@@ -179,6 +179,7 @@ function VocalDictionTab({ dictionSong }) {
         id: `custom-line-${i}`,
         original_text: line.original,
         ipa_text: line.ipa,
+        meaning_text: line.meaning,
         note_text: line.note,
         word_glosses: line.wordGlosses,
       })),
@@ -235,6 +236,9 @@ function VocalDictionTab({ dictionSong }) {
                   <p className="text-sm text-slate-500 font-mono mt-0.5">
                     [{line.ipa_text?.replace(/^\[|\]$/g, "")}]
                   </p>
+                  {line.meaning_text && (
+                    <p className="text-sm text-violet-600 mt-1">{line.meaning_text}</p>
+                  )}
                   <p className="text-sm text-slate-400 mt-1 flex items-start gap-1">
                     <BookOpen size={14} className="mt-0.5 flex-shrink-0" /> {line.note_text}
                   </p>
