@@ -14,10 +14,22 @@ const LINE_SCHEMA = {
           original: { type: "string" },
           romanized: { type: "string", description: "로마자 발음 표기, 원문이 이미 로마자면 빈 문자열" },
           meaning: { type: "string", description: "자연스러운 한국어 번역" },
-          ipa: { type: "string", description: "국제음성기호(IPA) 표기" },
+          ipa: { type: "string", description: "국제음성기호(IPA) 표기. 대괄호(예: [ ]) 없이 발음 기호만 반환" },
           note: { type: "string", description: "성악 발음(딕션) 관점의 한 문장 유의사항, 한국어" },
+          wordGlosses: {
+            type: "array",
+            description: "해당 줄을 이루는 단어(또는 의미 단위)별 한국어 뜻",
+            items: {
+              type: "object",
+              properties: {
+                word: { type: "string" },
+                meaning: { type: "string" },
+              },
+              required: ["word", "meaning"],
+            },
+          },
         },
-        required: ["original", "romanized", "meaning", "ipa", "note"],
+        required: ["original", "romanized", "meaning", "ipa", "note", "wordGlosses"],
       },
     },
   },
@@ -43,7 +55,7 @@ export async function POST(request) {
   }
 
   const numbered = lines.map((line, i) => `${i + 1}. ${line}`).join("\n");
-  const prompt = `다음은 사용자가 입력한 노래 가사입니다. 아래 줄들을 순서와 개수를 그대로 유지하며(총 ${lines.length}줄), 각 줄에 대해 romanized(로마자 발음), meaning(자연스러운 한국어 번역), ipa(국제음성기호), note(성악 딕션 관점의 한 문장 유의사항)를 채워서 반환하세요. 가사 전체의 언어를 한국어 이름으로 판단해 language 필드에도 넣으세요.
+  const prompt = `다음은 사용자가 입력한 노래 가사입니다. 아래 줄들을 순서와 개수를 그대로 유지하며(총 ${lines.length}줄), 각 줄에 대해 romanized(로마자 발음), meaning(자연스러운 한국어 번역), ipa(국제음성기호), note(성악 딕션 관점의 한 문장 유의사항), wordGlosses(그 줄을 이루는 단어 또는 의미 단위별 한국어 뜻 목록, 원문에 등장하는 순서대로)를 채워서 반환하세요. 가사 전체의 언어를 한국어 이름으로 판단해 language 필드에도 넣으세요.
 
 가사:
 ${numbered}`;

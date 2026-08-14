@@ -180,6 +180,7 @@ function VocalDictionTab({ dictionSong }) {
         original_text: line.original,
         ipa_text: line.ipa,
         note_text: line.note,
+        word_glosses: line.wordGlosses,
       })),
     };
     setCustomSongs((prev) => [newSong, ...prev]);
@@ -231,10 +232,26 @@ function VocalDictionTab({ dictionSong }) {
               {selectedSong.lines.map((line) => (
                 <div key={line.id} className="border-l-2 border-slate-200 pl-4 py-1">
                   <p className="text-slate-800 font-medium">{line.original_text}</p>
-                  <p className="text-sm text-slate-500 font-mono mt-0.5">[{line.ipa_text}]</p>
+                  <p className="text-sm text-slate-500 font-mono mt-0.5">
+                    [{line.ipa_text?.replace(/^\[|\]$/g, "")}]
+                  </p>
                   <p className="text-sm text-slate-400 mt-1 flex items-start gap-1">
                     <BookOpen size={14} className="mt-0.5 flex-shrink-0" /> {line.note_text}
                   </p>
+                  {line.word_glosses && line.word_glosses.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {line.word_glosses.map((gloss, i) => (
+                        <span
+                          key={i}
+                          title={gloss.meaning}
+                          className="text-[11px] px-2 py-1 rounded-lg bg-slate-100 text-slate-600 cursor-help"
+                        >
+                          <span className="font-medium text-slate-700">{gloss.word}</span>
+                          <span className="text-slate-400"> · {gloss.meaning}</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
               <button
