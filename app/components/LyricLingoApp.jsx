@@ -9,38 +9,6 @@ import { Music, Mic2, Volume2, BookOpen, Sparkles } from "lucide-react";
 // 탭 2: 성악 전문 모드 (기존 딕션 기능)
 // ---------------------------------------------
 
-const SAMPLE_SONGS = [
-  {
-    id: 1,
-    title: "Lemon",
-    artist: "米津玄師 (요네즈 켄시)",
-    language: "일본어",
-    lines: [
-      { original: "夢ならばどれほど良かったでしょう", romanized: "Yume naraba dore hodo yokatta deshou", meaning: "꿈이라면 얼마나 좋았을까요" },
-      { original: "未だにあなたのことを夢にみる", romanized: "Imada ni anata no koto o yume ni miru", meaning: "아직도 당신을 꿈에서 봐요" },
-    ],
-  },
-  {
-    id: 2,
-    title: "Let It Go",
-    artist: "Frozen OST",
-    language: "영어",
-    lines: [
-      { original: "The snow glows white on the mountain tonight", romanized: "", meaning: "오늘 밤 산 위에 눈이 하얗게 빛나네" },
-      { original: "Not a footprint to be seen", romanized: "", meaning: "발자국 하나 보이지 않아" },
-    ],
-  },
-];
-
-const DICTION_SAMPLE = {
-  title: "Caro nome (리골레토 중)",
-  language: "이탈리아어",
-  lines: [
-    { original: "Caro nome che il mio cor", ipa: "ˈka.ro ˈnɔ.me ke il mio kɔr", note: "'nome'의 이중자음 처리, 개모음 [ɔ] 유의" },
-    { original: "festi primo palpitar", ipa: "ˈfɛs.ti ˈpri.mo pal.pi.ˈtar", note: "'palpitar' 어말 r 굴림, 강세 위치 확인" },
-  ],
-};
-
 function TabButton({ active, onClick, icon: Icon, label }) {
   return (
     <button
@@ -56,8 +24,14 @@ function TabButton({ active, onClick, icon: Icon, label }) {
   );
 }
 
-function LearnModeTab() {
-  const [selectedSong, setSelectedSong] = useState(SAMPLE_SONGS[0]);
+function LearnModeTab({ songs }) {
+  const [selectedSong, setSelectedSong] = useState(songs[0] ?? null);
+
+  if (!selectedSong) {
+    return (
+      <div className="text-sm text-slate-400">등록된 노래가 아직 없어요.</div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -67,7 +41,7 @@ function LearnModeTab() {
       </div>
 
       <div className="flex gap-3 overflow-x-auto pb-1">
-        {SAMPLE_SONGS.map((song) => (
+        {songs.map((song) => (
           <button
             key={song.id}
             onClick={() => setSelectedSong(song)}
@@ -90,13 +64,13 @@ function LearnModeTab() {
           <Music size={18} className="text-violet-500" />
           {selectedSong.title}
         </div>
-        {selectedSong.lines.map((line, i) => (
-          <div key={i} className="border-l-2 border-violet-200 pl-4 py-1">
-            <p className="text-slate-800 font-medium">{line.original}</p>
-            {line.romanized && (
-              <p className="text-sm text-slate-400 italic mt-0.5">{line.romanized}</p>
+        {selectedSong.lines.map((line) => (
+          <div key={line.id} className="border-l-2 border-violet-200 pl-4 py-1">
+            <p className="text-slate-800 font-medium">{line.original_text}</p>
+            {line.romanized_text && (
+              <p className="text-sm text-slate-400 italic mt-0.5">{line.romanized_text}</p>
             )}
-            <p className="text-sm text-violet-600 mt-1">{line.meaning}</p>
+            <p className="text-sm text-violet-600 mt-1">{line.meaning_text}</p>
           </div>
         ))}
         <button className="flex items-center gap-2 text-sm text-violet-600 font-medium mt-2">
@@ -107,7 +81,13 @@ function LearnModeTab() {
   );
 }
 
-function VocalDictionTab() {
+function VocalDictionTab({ dictionSong }) {
+  if (!dictionSong) {
+    return (
+      <div className="text-sm text-slate-400">등록된 딕션 곡이 아직 없어요.</div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -118,17 +98,17 @@ function VocalDictionTab() {
       <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
         <div className="flex items-center gap-2 text-slate-800 font-medium">
           <Mic2 size={18} className="text-slate-500" />
-          {DICTION_SAMPLE.title}
+          {dictionSong.title}
           <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
-            {DICTION_SAMPLE.language}
+            {dictionSong.language}
           </span>
         </div>
-        {DICTION_SAMPLE.lines.map((line, i) => (
-          <div key={i} className="border-l-2 border-slate-200 pl-4 py-1">
-            <p className="text-slate-800 font-medium">{line.original}</p>
-            <p className="text-sm text-slate-500 font-mono mt-0.5">[{line.ipa}]</p>
+        {dictionSong.lines.map((line) => (
+          <div key={line.id} className="border-l-2 border-slate-200 pl-4 py-1">
+            <p className="text-slate-800 font-medium">{line.original_text}</p>
+            <p className="text-sm text-slate-500 font-mono mt-0.5">[{line.ipa_text}]</p>
             <p className="text-sm text-slate-400 mt-1 flex items-start gap-1">
-              <BookOpen size={14} className="mt-0.5 flex-shrink-0" /> {line.note}
+              <BookOpen size={14} className="mt-0.5 flex-shrink-0" /> {line.note_text}
             </p>
           </div>
         ))}
@@ -137,7 +117,7 @@ function VocalDictionTab() {
   );
 }
 
-export default function LyricLingoApp() {
+export default function LyricLingoApp({ songs, dictionSong }) {
   const [tab, setTab] = useState("learn");
 
   return (
@@ -153,7 +133,11 @@ export default function LyricLingoApp() {
           <TabButton active={tab === "diction"} onClick={() => setTab("diction")} icon={Mic2} label="성악 전문 모드" />
         </div>
 
-        {tab === "learn" ? <LearnModeTab /> : <VocalDictionTab />}
+        {tab === "learn" ? (
+          <LearnModeTab songs={songs} />
+        ) : (
+          <VocalDictionTab dictionSong={dictionSong} />
+        )}
       </div>
     </div>
   );
