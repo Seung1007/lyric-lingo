@@ -12,11 +12,15 @@ insert into songs (id, title, artist, language_code, mode) values
   ('00000000-0000-0000-0000-000000000003', 'Caro nome (리골레토 중)', 'Giuseppe Verdi', 'it', 'diction')
 on conflict (id) do nothing;
 
-insert into lyric_lines (song_id, line_order, original_text, romanized_text, meaning_text) values
-  ('00000000-0000-0000-0000-000000000001', 1, '夢ならばどれほど良かったでしょう', 'Yume naraba dore hodo yokatta deshou', '꿈이라면 얼마나 좋았을까요'),
-  ('00000000-0000-0000-0000-000000000001', 2, '未だにあなたのことを夢にみる', 'Imada ni anata no koto o yume ni miru', '아직도 당신을 꿈에서 봐요'),
-  ('00000000-0000-0000-0000-000000000002', 1, 'The snow glows white on the mountain tonight', null, '오늘 밤 산 위에 눈이 하얗게 빛나네'),
-  ('00000000-0000-0000-0000-000000000002', 2, 'Not a footprint to be seen', null, '발자국 하나 보이지 않아')
+insert into lyric_lines (song_id, line_order, original_text, romanized_text, meaning_text, word_glosses) values
+  ('00000000-0000-0000-0000-000000000001', 1, '夢ならばどれほど良かったでしょう', 'Yume naraba dore hodo yokatta deshou', '꿈이라면 얼마나 좋았을까요',
+    '[{"word": "夢 (yume)", "meaning": "꿈"}, {"word": "ならば", "meaning": "~이라면"}, {"word": "どれほど", "meaning": "얼마나"}, {"word": "良かった (yokatta)", "meaning": "좋았다"}, {"word": "でしょう", "meaning": "~겠지요"}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000001', 2, '未だにあなたのことを夢にみる', 'Imada ni anata no koto o yume ni miru', '아직도 당신을 꿈에서 봐요',
+    '[{"word": "未だに (imadani)", "meaning": "아직도"}, {"word": "あなた", "meaning": "당신"}, {"word": "のことを", "meaning": "~에 대해"}, {"word": "夢にみる (yume ni miru)", "meaning": "꿈에서 보다"}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000002', 1, 'The snow glows white on the mountain tonight', null, '오늘 밤 산 위에 눈이 하얗게 빛나네',
+    '[{"word": "snow", "meaning": "눈"}, {"word": "glows white", "meaning": "하얗게 빛나다"}, {"word": "mountain", "meaning": "산"}, {"word": "tonight", "meaning": "오늘 밤"}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000002', 2, 'Not a footprint to be seen', null, '발자국 하나 보이지 않아',
+    '[{"word": "footprint", "meaning": "발자국"}, {"word": "to be seen", "meaning": "보이는"}]'::jsonb)
 on conflict (song_id, line_order) do nothing;
 
 insert into lyric_lines (song_id, line_order, original_text, ipa_text, meaning_text, note_text, word_glosses) values

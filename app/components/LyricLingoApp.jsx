@@ -25,6 +25,24 @@ function TabButton({ active, onClick, icon: Icon, label }) {
   );
 }
 
+function WordGlossChips({ glosses }) {
+  if (!glosses || glosses.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-1.5 mt-2">
+      {glosses.map((gloss, i) => (
+        <span
+          key={i}
+          title={gloss.meaning}
+          className="text-[11px] px-2 py-1 rounded-lg bg-slate-100 text-slate-600 cursor-help"
+        >
+          <span className="font-medium text-slate-700">{gloss.word}</span>
+          <span className="text-slate-400"> · {gloss.meaning}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function LyricInputPanel({ onAnalyzed }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -92,6 +110,7 @@ function LearnModeTab({ songs }) {
         original_text: line.original,
         romanized_text: line.romanized,
         meaning_text: line.meaning,
+        word_glosses: line.wordGlosses,
       })),
     };
     setCustomSongs((prev) => [newSong, ...prev]);
@@ -143,6 +162,7 @@ function LearnModeTab({ songs }) {
                     <p className="text-sm text-slate-400 italic mt-0.5">{line.romanized_text}</p>
                   )}
                   <p className="text-sm text-violet-600 mt-1">{line.meaning_text}</p>
+                  <WordGlossChips glosses={line.word_glosses} />
                 </div>
               ))}
               <button
@@ -242,20 +262,7 @@ function VocalDictionTab({ dictionSong }) {
                   <p className="text-sm text-slate-400 mt-1 flex items-start gap-1">
                     <BookOpen size={14} className="mt-0.5 flex-shrink-0" /> {line.note_text}
                   </p>
-                  {line.word_glosses && line.word_glosses.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {line.word_glosses.map((gloss, i) => (
-                        <span
-                          key={i}
-                          title={gloss.meaning}
-                          className="text-[11px] px-2 py-1 rounded-lg bg-slate-100 text-slate-600 cursor-help"
-                        >
-                          <span className="font-medium text-slate-700">{gloss.word}</span>
-                          <span className="text-slate-400"> · {gloss.meaning}</span>
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <WordGlossChips glosses={line.word_glosses} />
                 </div>
               ))}
               <button
